@@ -1,0 +1,14 @@
+local json = require('json')
+
+local file = io.open('vtach.json', 'r')
+local jsonData = file:read('*all')
+file:close()
+
+local data = json.decode(jsonData)
+
+file = io.open('vtach.dat', 'w')
+for _, point in ipairs(data) do
+   file:write(tostring(point.x)..' '..tostring(point.y)..'\n')
+end
+
+file:close()
