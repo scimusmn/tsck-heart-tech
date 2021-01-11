@@ -1,9 +1,36 @@
 /* eslint-disable no-console */
+/* eslint-disable  prefer-destructuring */
 
 import React from 'react';
+import propTypes from 'prop-types';
 
 import Canvas from '@components/Canvas';
-import sinusRhythm from '@components/HeartBeat/sinusRhythm';
+// import avbII from '@components/HeartBeat/2d-AVB-ii';
+// import sinusBrachycardia from '@components/HeartBeat/sinus-brachycardia';
+// import sinusArrest from '@components/HeartBeat/sinus-arrest';
+import sinusRhythm from '@components/HeartBeat/sinus-rhythm';
+// import vfib from '@components/HeartBeat/vfib';
+// import vtach from '@components/HeartBeat/vtach';
+
+const LINE_COLOR = '#ff0000';
+const LINE_WIDTH = 5;
+const BG_COLOR = '#cccccc';
+
+function rhythm(data, heartrate, sx, sy, dx, dy, speed) {
+  return {
+    data,
+    heartrate,
+    scale: {
+      x: sx, y: sy, dx, dy,
+    },
+    speed,
+  };
+}
+
+function randomChoice(options) {
+  const choice = Math.floor(options.length * Math.random());
+  return options[choice];
+}
 
 class HeartBeat extends React.Component {
   constructor(props) {
@@ -12,20 +39,24 @@ class HeartBeat extends React.Component {
       time: 0,
     };
 
+    const { width, height } = this.props;
+
+    this.rhythms = [
+      rhythm(sinusRhythm, 70, width * (2600 / 600), height / 2, 0, height / 4, 200),
+    ];
+
     this.framerate = 30;
     this.delta = 1 / this.framerate;
     this.i0 = 0;
-    this.rhythm = sinusRhythm;
-    this.scale = {
-      x: 2600,
-      y: 300,
-      dx: 0,
-    };
-    this.speed = 200;
+
+    this.randomRhythm();
+
+    this.rhythm = this.rhythms[0];
 
     this.draw = this.draw.bind(this);
 
     console.log(sinusRhythm);
+    console.log(this.scale);
   }
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -40,30 +71,35 @@ class HeartBeat extends React.Component {
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
   getPoint(index) {
-    const i = index % this.rhythm.length;
-    const translation = this.scale.x * Math.floor(index / this.rhythm.length);
-    const p = this.rhythm[i];
+    const i = index % this.rhythm.data.length;
+    const translation = this.rhythm.scale.x * Math.floor(index / this.rhythm.data.length);
+    console.log('i', i, 'trans', translation);
+    const p = this.rhythm.data[i];
     return {
-      x: this.scale.x * p.x - this.scale.dx + translation,
-      y: this.scale.y * p.y,
+      x: this.rhythm.scale.x * p.x - this.rhythm.scale.dx + translation,
+      y: this.rhythm.scale.y * p.y + this.rhythm.scale.dy,
     };
   }
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-  draw(ctx, time) {
-    this.scale.dx = 200 * time;
+  randomRhythm() {
+    this.rhythm = randomChoice(this.rhythms);
+  }
 
-    ctx.strokeStyle = '#008000';
-    ctx.lineWidth = 5;
-    ctx.fillStyle = '#000000';
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+  draw(ctx, time) {
+    this.rhythm.scale.dx = 200 * time;
+
+    ctx.strokeStyle = LINE_COLOR;
+    ctx.lineWidth = LINE_WIDTH;
+    ctx.fillStyle = BG_COLOR;
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
     while (this.getPoint(this.i0 + 1).x < 0) {
       this.i0 += 1;
     }
-
-    console.log(this.i0);
 
     let i = this.i0;
     ctx.beginPath();
@@ -76,16 +112,29 @@ class HeartBeat extends React.Component {
       i += 1;
     }
 
-    console.log(i);
     ctx.stroke();
   }
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
   render() {
+    const { width, height } = this.props;
     const { time } = this.state;
-    return <Canvas draw={this.draw} data={time} />;
+    return
+      <>
+        <Canvas draw={this.draw} data={time} width={width} height={height} />
+      </>;
   }
 }
+
+HeartBeat.propTypes = {
+  width: propTypes.number,
+  height: propTypes.number,
+};
+
+HeartBeat.defaultProps = {
+  width: 600,
+  height: 300,
+};
 
 export default HeartBeat;

@@ -1,12 +1,10 @@
 import React from 'react';
-import { Link } from 'gatsby';
 
-import Home from '@components/Home';
+import HeartBeat from '@components/HeartBeat';
 
 const IndexPage = () => (
   <>
-    <Home />
-    <Link to="/second-page">Test?</Link>
+    <HeartBeat width={window.innerWidth} height={window.innerHeight} />
   </>
 );
 
