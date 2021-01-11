@@ -42,7 +42,7 @@ class HeartBeat extends React.Component {
     const { width, height } = this.props;
 
     this.rhythms = [
-      rhythm(sinusRhythm, 70, width * (2600 / 600), height / 2, 0, height / 4, 200),
+      rhythm(sinusRhythm, 70, width * (2600 / 600), height / 2, 0, height / 4, width / 4),
     ];
 
     this.framerate = 30;
@@ -62,10 +62,7 @@ class HeartBeat extends React.Component {
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
   componentDidMount() {
-    window.setInterval(() => {
-      const { time } = this.state;
-      this.setState({ time: time + this.delta });
-    }, 1000 * this.delta);
+    this.unpause();
   }
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -83,6 +80,21 @@ class HeartBeat extends React.Component {
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
+  pause() {
+    window.clearInterval(this.interval);
+  }
+
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+  unpause() {
+    this.interval = window.setInterval(() => {
+      const { time } = this.state;
+      this.setState({ time: time + this.delta });
+    }, 1000 * this.delta);
+  }
+
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
   randomRhythm() {
     this.rhythm = randomChoice(this.rhythms);
   }
@@ -90,7 +102,7 @@ class HeartBeat extends React.Component {
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
   draw(ctx, time) {
-    this.rhythm.scale.dx = 200 * time;
+    this.rhythm.scale.dx = this.rhythm.speed * time;
 
     ctx.strokeStyle = LINE_COLOR;
     ctx.lineWidth = LINE_WIDTH;
@@ -120,10 +132,15 @@ class HeartBeat extends React.Component {
   render() {
     const { width, height } = this.props;
     const { time } = this.state;
-    return
+    return (
       <>
-        <Canvas draw={this.draw} data={time} width={width} height={height} />
-      </>;
+        <Canvas className="behind" draw={this.draw} data={time} width={width} height={height} />
+        <div className="rightAligned card">
+          <h2>Heart Rate | معدل ضربات القلب</h2>
+          <h1 className="rightAligned">{`${this.rhythm.heartrate} bpm`}</h1>
+        </div>
+      </>
+    );
   }
 }
 

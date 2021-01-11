@@ -11,3 +11,19 @@ body {
   //font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
   //'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
+
+.behind {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: -1;
+}
+
+.rightAligned {
+    float: right;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+}

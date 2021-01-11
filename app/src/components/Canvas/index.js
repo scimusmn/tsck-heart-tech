@@ -24,9 +24,9 @@ class Canvas extends React.Component {
   }
 
   render() {
-    const { width, height } = this.props;
+    const { width, height, className } = this.props;
     return (
-      <canvas ref={this.canvasRef} width={width} height={height} />
+      <canvas ref={this.canvasRef} className={className} width={width} height={height} />
     );
   }
 }
@@ -36,12 +36,14 @@ Canvas.propTypes = {
   height: propTypes.number,
   draw: propTypes.func.isRequired,
   data: propTypes.any,
+  className: propTypes.string,
 };
 
 Canvas.defaultProps = {
   width: 300,
   height: 300,
   data: null,
+  className: '',
 };
 
 export default Canvas;
