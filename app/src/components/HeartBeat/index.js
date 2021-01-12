@@ -197,7 +197,7 @@ class HeartBeat extends React.Component {
 
   readType(type) {
     const { mode } = this.state;
-    if (mode !== 'playing') {
+    if (mode === 'correct') {
       return;
     }
 
