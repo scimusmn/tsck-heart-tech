@@ -14,6 +14,8 @@ import vfib from '@components/HeartBeat/vfib';
 import vtach from '@components/HeartBeat/vtach';
 
 const beep = new Audio('http://sanine.net/files/beep.mp3');
+const correct = new Audio('http://sanine.net/files/correct.mp3');
+const incorrect = new Audio('http://sanine.net/files/incorrect.mp3');
 beep.addEventListener('canplay', () => beep.playable = true);
 
 const LINE_COLOR = '#ff0000';
@@ -203,9 +205,11 @@ class HeartBeat extends React.Component {
 
     if (this.rhythm.treatment === type) {
       this.setState({ mode: 'correct' });
+      correct.play();
       this.setHealthy();
     } else {
       this.setState({ mode: 'incorrect' });
+      incorrect.play();
     }
   }
 
