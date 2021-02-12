@@ -58,7 +58,7 @@ class HeartBeat extends React.Component {
     this.rhythms = [
       rhythm(
         avbII,
-        70,
+        60,
         width * (2600 / 600),
         height / 2,
         0,
@@ -69,7 +69,7 @@ class HeartBeat extends React.Component {
       ),
       rhythm(
         sinusBrachycardia,
-        70,
+        54,
         width * (5000 / 600),
         height / 2,
         0,
@@ -80,7 +80,7 @@ class HeartBeat extends React.Component {
       ),
       rhythm(
         sinusArrest,
-        70,
+        54,
         width * (2600 / 600),
         height / 2,
         0,
@@ -91,7 +91,7 @@ class HeartBeat extends React.Component {
       ),
       rhythm(
         vfib,
-        70,
+        0,
         width * (2600 / 600),
         height / 2,
         0,
@@ -102,7 +102,7 @@ class HeartBeat extends React.Component {
       ),
       rhythm(
         vtach,
-        70,
+        210,
         width * (5000 / 600),
         height / 2,
         0,
@@ -115,7 +115,7 @@ class HeartBeat extends React.Component {
 
     this.healthyRhythm = rhythm(
       sinusRhythm,
-      70,
+      72,
       width * (2600 / 600),
       height / 2,
       0,
@@ -145,15 +145,15 @@ class HeartBeat extends React.Component {
 
     document.addEventListener('keydown', (e) => {
       switch (e.code) {
-        case 'ArrowDown':
+        case 'Space':
           this.buttonPushed();
           break;
 
-        case 'ArrowLeft':
+        case 'KeyP':
           this.readPacemaker();
           break;
 
-        case 'ArrowRight':
+        case 'KeyD':
           this.readDefibrillator();
           break;
 
